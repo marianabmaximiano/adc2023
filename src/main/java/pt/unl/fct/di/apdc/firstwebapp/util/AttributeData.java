@@ -1,5 +1,7 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
+import java.util.regex.Pattern;
+
 public class AttributeData {
 
 	public String username1;
@@ -21,5 +23,17 @@ public class AttributeData {
 		this.phoneNumber = phoneNumber;
 		this.nif = nif;
 	
+	}
+	
+	public boolean patternMatches(String email, String pattern) {
+	    return Pattern.compile(pattern).matcher(email).matches();
+	}
+
+	public boolean validEmail() {
+		String emailPattern = "^(.+)@(\\S+)$";
+	    if(patternMatches(email, emailPattern)) {
+	    	return true;
+	    }
+		return false;
 	}
 }

@@ -35,17 +35,17 @@ public class AttributeResource {
 		if(data.name.isBlank())
 			name = txn.get(key).getString("user_name");
 		else name = data.name;
-		if(data.email.isBlank())
-			email = txn.get(key).getString("user_email");
-		else email = data.email;
+		if(!data.email.isBlank() && data.validEmail())
+			email = data.email;
+		else email = txn.get(key).getString("user_email");
 		if(data.profile.isBlank())
 			profile = txn.get(key).getString("user_profile");
 		else profile = data.profile;
 		if(data.phoneNumber.isBlank())
-			phoneNumber = txn.get(key).getString("user_profile");
+			phoneNumber = txn.get(key).getString("user_phone");
 		else phoneNumber = data.phoneNumber;
 		if(data.nif.isBlank())
-			nif = txn.get(key).getString("user_profile");
+			nif = txn.get(key).getString("user_nif");
 		else nif = data.nif;
 		
 		Entity user = Entity.newBuilder(key)
@@ -67,23 +67,28 @@ public class AttributeResource {
 	}
 	
 	private Response changeUserAttributesAux(Transaction txn, Key key, AttributeData data) {
-		String profile, phoneNumber, nif;
-
+		String name, email, profile, phoneNumber, nif;
+		if(!data.name.isBlank()) 
+			return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
+		else name = txn.get(key).getString("user_name");
+		if(!data.email.isBlank()) 
+			return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
+		else email = txn.get(key).getString("user_email");
 		if(data.profile.isBlank())
 			profile = txn.get(key).getString("user_profile");
 		else profile = data.profile;
 		if(data.phoneNumber.isBlank())
-			phoneNumber = txn.get(key).getString("user_profile");
+			phoneNumber = txn.get(key).getString("user_phone");
 		else phoneNumber = data.phoneNumber;
 		if(data.nif.isBlank())
-			nif = txn.get(key).getString("user_profile");
+			nif = txn.get(key).getString("user_nif");
 		else nif = data.nif;
 		
 		Entity user = Entity.newBuilder(key)
 				.set("id", txn.get(key).getString("id"))
-				.set("user_name",txn.get(key).getString("user_name"))
+				.set("user_name",name)
 				.set("user_pwd", txn.get(key).getString("user_pwd"))
-				.set("user_email", txn.get(key).getString("user_email"))
+				.set("user_email", email)
 				.set("user_profile",profile)
 				.set("user_phone", phoneNumber)
 				.set("user_nif", nif)

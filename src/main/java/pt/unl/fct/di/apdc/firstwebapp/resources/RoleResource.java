@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response.Status;
 
 import pt.unl.fct.di.apdc.firstwebapp.util.*;
 
-@Path("/newRole")
+@Path("/role")
 @Produces(MediaType.APPLICATION_JSON)
 public class RoleResource {
 	
@@ -37,7 +37,7 @@ public class RoleResource {
 	}
 	
 	@POST
-	@Path("/v1")
+	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response switchRole(RoleData data) {
 		

@@ -57,5 +57,12 @@ public class RegisterData {
 		}
 		return false;
 	}
+	
+	public boolean mandatoryFieldsFilled() {
+		if(username.isBlank() || password.isBlank() || name.isBlank() || email.isBlank()) {
+			return false;
+		}
+		return true;
+	}
 
 }

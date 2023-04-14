@@ -35,11 +35,14 @@ public class RegisterResource {
 	
 	
 	@POST
-	@Path("/v2")
+	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response doRegistrationV2(RegisterData data) {
+	public Response doRegistration(RegisterData data) {
 		LOG.fine("Attempt to register user" + data.username);
 		
+		if(!data.mandatoryFieldsFilled()) {
+			return Response.status(Status.BAD_REQUEST).entity("At least one mandatory register field missing.").build();
+		}
 		if(!data.validEmail()) {
 			return Response.status(Status.BAD_REQUEST).entity("Invalid email format.").build();
 		}

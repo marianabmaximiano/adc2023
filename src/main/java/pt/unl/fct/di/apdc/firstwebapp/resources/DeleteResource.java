@@ -28,8 +28,9 @@ public class DeleteResource {
 	public DeleteResource() {}
 	
 	
-	private Response deleteAux(Transaction txn, Key key) {
+	private Response deleteAux(Transaction txn, Key key, Key tkey) {
 		txn.delete(key);
+		txn.delete(tkey);
 		txn.commit();
 		return Response.status(Status.OK).build();
 	}
@@ -83,32 +84,32 @@ public class DeleteResource {
 				
 				if(is1Active) {
 					if(is1SU) {
-						return deleteAux(txn, key2);
+						return deleteAux(txn, key2, tkey);
 					}
 					else if(is1GS) {
 						if(is2GBO || is2GA || is2USER) {
-							return deleteAux(txn, key2);
+							return deleteAux(txn, key2, tkey);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GA) {
 						if(is2GBO || is2USER) {
-							return deleteAux(txn, key2);
+							return deleteAux(txn, key2, tkey);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GBO) {
 						if(is2USER) {
-							return deleteAux(txn, key2);
+							return deleteAux(txn, key2, tkey);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1USER) {
 						if(roleUser2.contentEquals(roleUser1)) {
-							return deleteAux(txn, key2);
+							return deleteAux(txn, key2, tkey);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}

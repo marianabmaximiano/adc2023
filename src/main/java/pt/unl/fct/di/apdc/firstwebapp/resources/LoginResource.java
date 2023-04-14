@@ -13,6 +13,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 
 
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
@@ -22,7 +23,7 @@ import com.google.gson.Gson;
 import com.google.cloud.datastore.*;
 
 
-@Path("/login")
+@Path("/account")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class LoginResource {
 	
@@ -37,10 +38,10 @@ public class LoginResource {
 
 	
 	@POST
-	@Path("/v1")
+	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Response doLogin1 (LoginData data) {
+	public Response doLogin (LoginData data) {
 		LOG.fine("Attempt to login user: " + data.username);
 		
 		Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username); 
@@ -84,10 +85,10 @@ public class LoginResource {
 	}
 	
 	
-	@POST
+	@DELETE
 	@Path("/logout")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response logout(LoginData data) {
+	public Response doLogout(LoginData data) {
 		
 		Key tKey = datastore.newKeyFactory().setKind("Token").newKey(data.username); 
 		Transaction txn = datastore.newTransaction();
@@ -97,7 +98,7 @@ public class LoginResource {
 			if(token.getString("token_id") != null) {
 				txn.delete(tKey);
 				txn.commit();
-				return Response.status(Status.OK).entity(data.username + " is now logged out.").build();
+				return Response.status(Status.OK).entity(data.username + " is now logged out. Token " + token.getString("token_id") + " is revoked.").build();
 			}
 			return Response.status(Status.BAD_REQUEST).entity("Token doesn't exist.").build();
 		} finally {
