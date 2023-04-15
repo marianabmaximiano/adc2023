@@ -61,6 +61,7 @@ public class AttributeResource {
 				.set("user_creation_time", Timestamp.now()).build();
 		
 		txn.update(user);
+		
 		txn.commit();
 		
 		return Response.status(Status.OK).build();
@@ -91,6 +92,7 @@ public class AttributeResource {
 				.set("user_creation_time", Timestamp.now()).build();
 		
 		txn.update(user);
+		
 		txn.commit();
 		
 		return Response.status(Status.OK).build();
@@ -206,6 +208,8 @@ public class AttributeResource {
 	@Path("/changePass")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changePassword(PasswordData data) {
+		
+		LOG.fine("Attempt to change user password");
 		
 		Key key = datastore.newKeyFactory().setKind("User").newKey(data.username);
 		Key tkey = datastore.newKeyFactory().setKind("Token").newKey(data.username);
