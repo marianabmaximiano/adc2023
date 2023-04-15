@@ -28,12 +28,13 @@ public class DeleteResource {
 	public DeleteResource() {}
 	
 	
-	private Response deleteAux(Transaction txn, Key key, Key tkey) {
+	private Response deleteAux(Transaction txn, Key key) {
 		txn.delete(key);
-		txn.delete(tkey);
 		txn.commit();
 		return Response.status(Status.OK).build();
 	}
+	
+
 	
 	@DELETE
 	@Path("/v1")
@@ -45,7 +46,6 @@ public class DeleteResource {
 		Key key2 = datastore.newKeyFactory().setKind("User").newKey(data.username2);
 
 		Key tkey1 = datastore.newKeyFactory().setKind("Token").newKey(data.username1);
-		Key tkey2 = datastore.newKeyFactory().setKind("Token").newKey(data.username2);
 		
 		 
 		Transaction txn = datastore.newTransaction();
@@ -84,37 +84,36 @@ public class DeleteResource {
 				
 				boolean is1Active = user1.getString("state").equalsIgnoreCase(State.ACTIVE.toString());
 				
-				String token2 = txn.get(tkey2).getString("token_id");
+				
 				
 				if(is1Active) {
 					if(is1SU) {
-						if(token2!=null)
-						return deleteAux(txn, key2, tkey2);
+						return deleteAux(txn, key2);
 					}
 					else if(is1GS) {
 						if(is2GBO || is2GA || is2USER) {
-							return deleteAux(txn, key2, tkey2);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GA) {
 						if(is2GBO || is2USER) {
-							return deleteAux(txn, key2, tkey2);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GBO) {
 						if(is2USER) {
-							return deleteAux(txn, key2, tkey2);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1USER) {
 						if(roleUser2.contentEquals(roleUser1)) {
-							return deleteAux(txn, key2, tkey2);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
