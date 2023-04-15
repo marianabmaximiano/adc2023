@@ -195,7 +195,9 @@ public class AttributeResource {
 			String name = txn.get(key).getString("user_name");
 			String email = txn.get(key).getString("user_email");
 			String profile = txn.get(key).getString("user_profile");
-			return Response.status(Status.OK).entity(username + " attributes are: name " + name + ", email: " + email + ", profile: " + profile).build();
+			String phoneNumber = txn.get(key).getString("user_phone");
+			String nif = txn.get(key).getString("user_nif");
+			return Response.status(Status.OK).entity(username + " attributes are: name: " + name + ", email: " + email + ", profile: " + profile + ", phoneNumber: " + phoneNumber + ", nif: "+ nif).build();
 
 		} finally {
 			if (txn.isActive())
