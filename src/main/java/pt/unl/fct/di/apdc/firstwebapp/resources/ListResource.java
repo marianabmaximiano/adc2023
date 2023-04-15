@@ -39,12 +39,7 @@ public class ListResource {
 		
 		String roleUser = datastore.get(key).getString("user_role");
 		
-		Key tkey = datastore.newKeyFactory().setKind("Token").newKey(data.username);
 		
-		long expiration = datastore.get(tkey).getLong("expiration_data");
-		String tID = datastore.get(tkey).getString("token_id");
-		
-		if(expiration>System.currentTimeMillis() && tID!=null ) {
 		
 		boolean isSU = roleUser.equalsIgnoreCase(Role.SU.toString());
 		boolean isGS = roleUser.equalsIgnoreCase(Role.GS.toString());
@@ -171,10 +166,7 @@ public class ListResource {
 		return Response.status(Status.BAD_REQUEST).entity("Listing not allowed.").build();
 	}
 		
-		return Response.status(Status.BAD_REQUEST).entity("Not loged in.").build();
 		
-	
-	}
 	
 	
 	

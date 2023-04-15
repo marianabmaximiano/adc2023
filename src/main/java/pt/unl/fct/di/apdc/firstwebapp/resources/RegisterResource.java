@@ -39,9 +39,8 @@ public class RegisterResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response doRegistration(RegisterData data) {
 		LOG.fine("Attempt to register user" + data.username);
-		
 		if(!data.mandatoryFieldsFilled()) {
-			return Response.status(Status.BAD_REQUEST).entity("At least one mandatory register field missing.").build();
+			return Response.status(Status.BAD_REQUEST).entity("At least one mandatory field missing.").build();
 		}
 		if(!data.validEmail()) {
 			return Response.status(Status.BAD_REQUEST).entity("Invalid email format.").build();

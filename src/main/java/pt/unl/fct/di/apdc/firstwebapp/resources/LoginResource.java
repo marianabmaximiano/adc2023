@@ -99,7 +99,7 @@ public class LoginResource {
 			if(token.getString("token_id") != null) {
 				txn.delete(tKey);
 				txn.commit();
-				return Response.status(Status.OK).entity(data.username + " is now logged out. Token " + token.getString("token_id") + " is revoked.").build();
+				return Response.status(Status.OK).entity(data.username + " is now logged out. Token was revoked.").build();
 			}
 			return Response.status(Status.BAD_REQUEST).entity("Token doesn't exist.").build();
 		} finally {

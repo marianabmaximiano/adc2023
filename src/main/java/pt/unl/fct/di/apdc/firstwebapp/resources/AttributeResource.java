@@ -67,13 +67,7 @@ public class AttributeResource {
 	}
 	
 	private Response changeUserAttributesAux(Transaction txn, Key key, AttributeData data) {
-		String name, email, profile, phoneNumber, nif;
-		if(!data.name.isBlank()) 
-			return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
-		else name = txn.get(key).getString("user_name");
-		if(!data.email.isBlank()) 
-			return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
-		else email = txn.get(key).getString("user_email");
+		String profile, phoneNumber, nif;
 		if(data.profile.isBlank())
 			profile = txn.get(key).getString("user_profile");
 		else profile = data.profile;
@@ -86,9 +80,9 @@ public class AttributeResource {
 		
 		Entity user = Entity.newBuilder(key)
 				.set("id", txn.get(key).getString("id"))
-				.set("user_name",name)
+				.set("user_name",txn.get(key).getString("user_name"))
 				.set("user_pwd", txn.get(key).getString("user_pwd"))
-				.set("user_email", email)
+				.set("user_email", txn.get(key).getString("user_email"))
 				.set("user_profile",profile)
 				.set("user_phone", phoneNumber)
 				.set("user_nif", nif)
