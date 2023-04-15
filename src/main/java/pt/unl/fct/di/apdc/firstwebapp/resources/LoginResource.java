@@ -2,6 +2,7 @@ package pt.unl.fct.di.apdc.firstwebapp.resources;
 
 import java.util.logging.Logger;
 
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
@@ -13,7 +14,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
+
 
 
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
@@ -85,7 +86,7 @@ public class LoginResource {
 	}
 	
 	
-	@DELETE
+	@POST
 	@Path("/logout")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response doLogout(LoginData data) {

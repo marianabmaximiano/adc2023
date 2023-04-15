@@ -28,9 +28,9 @@ public class DeleteResource {
 	public DeleteResource() {}
 	
 	
-	private Response deleteAux(Transaction txn, Key key, Key tkey) {
+	private Response deleteAux(Transaction txn, Key key) {
 		txn.delete(key);
-		txn.delete(tkey);
+		
 		txn.commit();
 		return Response.status(Status.OK).build();
 	}
@@ -44,14 +44,15 @@ public class DeleteResource {
 		Key key1 = datastore.newKeyFactory().setKind("User").newKey(data.username1);
 		Key key2 = datastore.newKeyFactory().setKind("User").newKey(data.username2);
 
-		Key tkey = datastore.newKeyFactory().setKind("Token").newKey(data.username1);
+		Key tkey1 = datastore.newKeyFactory().setKind("Token").newKey(data.username1);
+		
 		 
 		Transaction txn = datastore.newTransaction();
 		
 		try {
 			
-			long expiration = txn.get(tkey).getLong("expiration_data");
-			String tID = txn.get(tkey).getString("token_id");
+			long expiration = txn.get(tkey1).getLong("expiration_data");
+			String tID = txn.get(tkey1).getString("token_id");
 			
 			if(expiration>System.currentTimeMillis() && tID!=null ) {
 			
@@ -62,7 +63,7 @@ public class DeleteResource {
 			
 			if(user2 == null) {
 				txn.rollback();
-				return Response.status(Status.BAD_REQUEST).entity("User does not exist").build();
+				return Response.status(Status.BAD_REQUEST).entity("User" + data.username2 + " does not exist.").build();
 			}
 			
 			else {
@@ -84,32 +85,32 @@ public class DeleteResource {
 				
 				if(is1Active) {
 					if(is1SU) {
-						return deleteAux(txn, key2, tkey);
+						return deleteAux(txn, key2);
 					}
 					else if(is1GS) {
 						if(is2GBO || is2GA || is2USER) {
-							return deleteAux(txn, key2, tkey);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GA) {
 						if(is2GBO || is2USER) {
-							return deleteAux(txn, key2, tkey);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1GBO) {
 						if(is2USER) {
-							return deleteAux(txn, key2, tkey);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}
 					}
 					else if(is1USER) {
 						if(roleUser2.contentEquals(roleUser1)) {
-							return deleteAux(txn, key2, tkey);
+							return deleteAux(txn, key2);
 						} else {
 							return Response.status(Status.BAD_REQUEST).entity("Not authorized.").build();
 						}

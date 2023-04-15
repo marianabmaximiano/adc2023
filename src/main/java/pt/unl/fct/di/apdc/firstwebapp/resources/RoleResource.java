@@ -120,7 +120,7 @@ public class RoleResource {
 	@POST
 	@Path("/su")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response turnSupervisor(RegisterData data) {
+	public Response turnSupervisor(RegisterData data) {  
 			Key key = datastore.newKeyFactory().setKind("User").newKey(data.username);
 			Transaction txn = datastore.newTransaction();
 			try {
